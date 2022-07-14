@@ -35,7 +35,24 @@ class DrawingView(context: Context, attrs: AttributeSet) : View(context,attrs){
         mCanvasBitmap = Bitmap.createBitmap(w,h,Bitmap.Config.ARGB_8888)
         canvas = Canvas(mCanvasBitmap!!)
     }
+
+    /**
+     * This method is called when a stroke is drawn on the canvas
+     * as a part of the painting.
+     */
     override fun onDraw(canvas: Canvas){
+        /**
+         * Draw the specified bitmap, with its top/left corner at (x,y), using the specified paint,
+         * transformed by the current matrix.
+         *
+         *If the bitmap and canvas have different densities, this function will take care of
+         * automatically scaling the bitmap to draw at the same density as the canvas.
+         *
+         * @param bitmap The bitmap to be drawn
+         * @param left The position of the left side of the bitmap being drawn
+         * @param top The position of the top side of the bitmap being drawn
+         * @param paint The paint used to draw the bitmap (may be null)
+         */
         super.onDraw(canvas)
         canvas.drawBitmap(mCanvasBitmap!!,0f,0f,mCanvasPaint)
         for(path in mPaThs){
@@ -87,5 +104,10 @@ class DrawingView(context: Context, attrs: AttributeSet) : View(context,attrs){
         mDrawPaint!!.strokeWidth = mBrushSize
     }
 
+    fun setColor(newColor: String){
+        color = Color.parseColor(newColor)
+    }
+
+    // An inner class for custom path with two params as color and stoke size
     internal inner class CustomPath(var color:Int, var brushThickness: Float) : Path()
 }
