@@ -4,7 +4,6 @@ import android.app.Dialog
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
-import android.widget.Button
 import android.widget.ImageButton
 import android.widget.LinearLayout
 import android.widget.Toast
@@ -23,7 +22,7 @@ class MainActivity : AppCompatActivity() {
         val linearLayoutPaintColor = findViewById<LinearLayout>(R.id.ll_paint_collors)
         mImageButtonCurrentPaint = linearLayoutPaintColor[1] as ImageButton
         mImageButtonCurrentPaint!!.setImageDrawable(
-            ContextCompat.getDrawable(this,R.drawable.pallet_preset)
+            ContextCompat.getDrawable(this,R.drawable.pallet_presed)
         )
         val ib_brush :ImageButton = findViewById(R.id.ib_brush)
         ib_brush.setOnClickListener{
@@ -61,11 +60,12 @@ class MainActivity : AppCompatActivity() {
             val colorTag = imageButton.tag.toString()
             drawingView?.setColor(colorTag)
             imageButton.setImageDrawable(
-                ContextCompat.getDrawable(this,R.drawable.pallet_preset)
+                ContextCompat.getDrawable(this,R.drawable.pallet_presed)
             )
             mImageButtonCurrentPaint?.setImageDrawable(
                 ContextCompat.getDrawable(this,R.drawable.pallet_normal)
             )
+            mImageButtonCurrentPaint = view
 
         }
     }
