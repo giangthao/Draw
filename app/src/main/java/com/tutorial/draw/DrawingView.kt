@@ -1,5 +1,6 @@
 package com.tutorial.draw
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.*
 import android.util.AttributeSet
@@ -7,6 +8,7 @@ import android.util.TypedValue
 import android.view.MotionEvent
 import android.view.View
 
+@SuppressLint("New API")
 class DrawingView(context: Context, attrs: AttributeSet) : View(context,attrs){
     private var mDrawPath : CustomPath? = null
     private var mCanvasBitmap: Bitmap? = null
@@ -16,6 +18,7 @@ class DrawingView(context: Context, attrs: AttributeSet) : View(context,attrs){
     private var color = Color.BLUE
     private var canvas: Canvas? = null
     private val mPaThs = ArrayList<CustomPath>()
+    private val mUndoPaths = ArrayList<CustomPath>()
     init {
         setupDrawing()
     }
@@ -102,6 +105,12 @@ class DrawingView(context: Context, attrs: AttributeSet) : View(context,attrs){
     fun setSizeForBrush(newSize:Float){
         mBrushSize = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,newSize, resources.displayMetrics)
         mDrawPaint!!.strokeWidth = mBrushSize
+    }
+    fun onClickUndo(){
+        if(mPaThs.size>0){
+            mUndoPaths.add(mPaThs.removeAt(mPaThs.size-1))
+            invalidate()
+        }
     }
 
     fun setColor(newColor: String){
