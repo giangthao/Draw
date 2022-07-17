@@ -27,6 +27,7 @@
             android:id ="@+id/drawing_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_marginBottom="80dp"
             android:background="#80FFFFFF"
             />
     </FrameLayout>
@@ -140,7 +141,7 @@
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_margin="5dp"
-            android:src="@drawable/ic_brush"
+            android:src="@drawable/ic_gallery"
             />
 
         <ImageButton
@@ -149,8 +150,6 @@
         android:layout_height="50dp"
         android:layout_margin="5dp"
         android:src="@drawable/ic_brush"
-        android:scaleType="fitXY"
-
         />
     </LinearLayout>
 
