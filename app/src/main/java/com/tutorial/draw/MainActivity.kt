@@ -12,6 +12,9 @@ import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import android.Manifest
 import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.Canvas
+import android.graphics.Color
 import android.os.Build
 import android.provider.MediaStore
 import android.widget.ImageView
@@ -19,6 +22,12 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.view.get
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
+import java.io.ByteArrayOutputStream
+import java.io.File
+import java.io.FileOutputStream
+import java.lang.Exception
 
 class MainActivity : AppCompatActivity() {
     private  var drawingView:DrawingView? = null
@@ -101,6 +110,10 @@ class MainActivity : AppCompatActivity() {
         ibUndo.setOnClickListener {
             drawingView?.onClickUndo()
         }
+        val ibSave: ImageButton = findViewById(R.id.ib_save)
+        ibSave.setOnClickListener {
+
+        }
     }
     private  fun showBrushSizeChooserDialog(){
         val brushDialog = Dialog(this)
@@ -142,6 +155,7 @@ class MainActivity : AppCompatActivity() {
 
         }
     }
+
     private fun requestStoragePermission(){
         if(ActivityCompat.shouldShowRequestPermissionRationale(
                 this,
@@ -152,10 +166,72 @@ class MainActivity : AppCompatActivity() {
             )
             }
         else{
-            requestPremission.launch(arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE))
+            requestPremission.launch(arrayOf(
+                Manifest.permission.READ_EXTERNAL_STORAGE,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE
+                ))
             // TODO - Add writing external storage
         }
 
+    }
+    private fun getBitmapFromView(view: View):Bitmap{
+        //Define a bitmap with the same size as the view
+        // CreateBitmap: Return a mutable bitmap with the specified with and hight
+        val returnedBitmap = Bitmap.createBitmap(view.width
+            //Bind a canvas to it
+            ,view.height,Bitmap.Config.ARGB_8888)
+        val canvas = Canvas(returnedBitmap)
+        //Get the view's background
+        val bgDrawable = view.background
+        if(bgDrawable!=null){
+            // has background
+            bgDrawable.draw(canvas)
+        }else
+        {
+            canvas.drawColor(Color.WHITE)
+        }
+        view.draw(canvas)
+        return  returnedBitmap
+    }
+    private suspend fun saveBitmapFile(mBitmap: Bitmap):String{
+        var result =""
+        withContext(Dispatchers.IO){
+            if(mBitmap !=null){
+                try {
+                    val bytes = ByteArrayOutputStream()
+                    mBitmap.compress(Bitmap.CompressFormat.PNG, 9,bytes)
+                    val f = File(externalCacheDir?.absoluteFile.toString()
+                            + File.separator +"KidDrawingApp_"+System.currentTimeMillis()/1000 +".png"
+                    )
+                    val fo = FileOutputStream(f)
+                    fo.write(bytes.toByteArray())
+                    fo.close()
+
+                    result = f.absolutePath
+                    runOnUiThread{
+                        if(result.isNotEmpty()){
+                            Toast.makeText(
+                                this@MainActivity,
+                                "File save successfully :$result",
+                                Toast.LENGTH_LONG
+                            ).show()
+                        } else {
+                            Toast.makeText(
+                                this@MainActivity,
+                                "Something went wrong while saving the file.",
+                                Toast.LENGTH_LONG
+                            ).show()
+                        }
+                    }
+                }
+                catch (e:Exception){
+                    result = ""
+                    e.printStackTrace()
+                }
+            }
+
+        }
+        return result
     }
     private fun showRationaleDialog(
         title: String,

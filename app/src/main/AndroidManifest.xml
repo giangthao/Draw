@@ -2,7 +2,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="com.tutorial.draw">
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"
+        />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
 
     <application
         android:allowBackup="true"
@@ -15,11 +17,6 @@
         android:theme="@style/Theme.Draw"
         tools:targetApi="31">
         <activity
-            android:name=".dialog_brush_size"
-            android:exported="false"
-            android:label="@string/title_activity_dialog_brush_size"
-            android:theme="@style/Theme.Draw.NoActionBar" />
-        <activity
             android:name=".MainActivity"
             android:exported="true"
             android:screenOrientation="portrait">
@@ -29,6 +26,15 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <provider
+            android:authorities="package com.tutorial.draw"
+            android:name="androidx.core.content.FileProvider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATH"
+                android:resource="@xml/path" />
+        </provider>
     </application>
 
 </manifest>
