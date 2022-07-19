@@ -13,13 +13,12 @@ import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Color
-import android.os.Build
+import android.media.MediaScannerConnection
 import android.provider.MediaStore
 import android.widget.*
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.core.content.PackageManagerCompat
 import androidx.core.view.get
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.Dispatchers
@@ -33,7 +32,7 @@ import java.lang.Exception
 class MainActivity : AppCompatActivity() {
     private  var drawingView:DrawingView? = null
     private var mImageButtonCurrentPaint: ImageButton? = null
-    private var mImageButtonImage: ImageButton? = null
+    private var customeProgressDialog: Dialog? = null
     val openGalleryLauncher: ActivityResultLauncher<Intent> =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()){
             result ->
@@ -114,6 +113,7 @@ class MainActivity : AppCompatActivity() {
         val ibSave: ImageButton = findViewById(R.id.ib_save)
         ibSave.setOnClickListener {
             if(isReadStorageAllowed()){
+                showProgressDialog()
                 lifecycleScope.launch {
                     val flDrawingView:FrameLayout = findViewById(R.id.fl_drawing_view_container)
                     // val myBitmap :Bitmap = getBitmapFromView(flDrawingView)
@@ -213,7 +213,7 @@ class MainActivity : AppCompatActivity() {
                 try {
                     val bytes = ByteArrayOutputStream()
                     mBitmap.compress(Bitmap.CompressFormat.PNG, 9,bytes)
-                    val f = File(externalCacheDir?.absoluteFile.toString()
+                    val f = File(filesDir?.absoluteFile.toString()
                             + File.separator +"KidDrawingApp_"+System.currentTimeMillis()/1000 +".png"
                     )
                     val fo = FileOutputStream(f)
@@ -222,12 +222,14 @@ class MainActivity : AppCompatActivity() {
 
                     result = f.absolutePath
                     runOnUiThread{
+                        cancelProgressDialog()
                         if(result.isNotEmpty()){
                             Toast.makeText(
                                 this@MainActivity,
                                 "File save successfully :$result",
                                 Toast.LENGTH_LONG
                             ).show()
+                            shareImage(result)
                         } else {
                             Toast.makeText(
                                 this@MainActivity,
@@ -258,5 +260,30 @@ class MainActivity : AppCompatActivity() {
             }
         builder.create().show()
 
+    }
+    private fun showProgressDialog(){
+        customeProgressDialog = Dialog(this@MainActivity)
+        /*Set the screen content from a layout resource
+            The resource will be inflated adding all top level views to the screen
+         */
+        customeProgressDialog?.setContentView(R.layout.dialog_custome_progress)
+        //Start the dialog and display on screen
+        customeProgressDialog?.show()
+    }
+    private fun cancelProgressDialog(){
+        if(customeProgressDialog!=null){
+            customeProgressDialog?.dismiss()
+            customeProgressDialog = null
+        }
+    }
+    private fun shareImage(result:String){
+        MediaScannerConnection.scanFile(this, arrayOf(result),null){
+            path,uri ->
+            val shareIntent = Intent()
+            shareIntent.action = Intent.ACTION_SEND
+            shareIntent.putExtra(Intent.EXTRA_STREAM, uri)
+            shareIntent.type ="imge/png"
+            startActivity(Intent.createChooser(shareIntent,"Share"))
+        }
     }
 }

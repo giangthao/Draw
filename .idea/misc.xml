@@ -4,18 +4,17 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="../../../../../layout/custom_preview.xml" value="0.27445652173913043" />
-        <entry key="app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.1" />
         <entry key="app/src/main/res/drawable-v24/large.xml" value="0.3305" />
         <entry key="app/src/main/res/drawable/background_drawing_view_layout.xml" value="0.122" />
-        <entry key="app/src/main/res/drawable/ic_launcher_background.xml" value="0.1575" />
         <entry key="app/src/main/res/drawable/medium.xml" value="0.3305" />
         <entry key="app/src/main/res/drawable/pallet_normal.xml" value="0.244" />
-        <entry key="app/src/main/res/drawable/pallet_presed.xml" value="0.207" />
         <entry key="app/src/main/res/drawable/pallet_preset.xml" value="0.245" />
         <entry key="app/src/main/res/layout/activity_dialog_brush_size.xml" value="0.184375" />
-        <entry key="app/src/main/res/layout/activity_main.xml" value="0.42539388322520855" />
+        <entry key="app/src/main/res/layout/activity_main.xml" value="0.37193763919821826" />
         <entry key="app/src/main/res/layout/dialog_brush_size.xml" value="0.2904259403082285" />
         <entry key="app/src/main/res/layout/small.xml" value="0.23645833333333333" />
+        <entry key="app/src/main/res/xml/dialog_custome_progress.xml" value="0.22291666666666668" />
+        <entry key="app/src/main/res/xml/path.xml" value="0.190625" />
       </map>
     </option>
   </component>
