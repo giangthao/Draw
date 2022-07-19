@@ -6,24 +6,23 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.widget.ImageButton
+import android.widget.LinearLayout
+import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import android.Manifest
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Color
 import android.os.Build
 import android.provider.MediaStore
-import android.widget.*
+import android.widget.ImageView
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.core.content.PackageManagerCompat
 import androidx.core.view.get
-import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.io.ByteArrayOutputStream
 import java.io.File
@@ -113,13 +112,7 @@ class MainActivity : AppCompatActivity() {
         }
         val ibSave: ImageButton = findViewById(R.id.ib_save)
         ibSave.setOnClickListener {
-            if(isReadStorageAllowed()){
-                lifecycleScope.launch {
-                    val flDrawingView:FrameLayout = findViewById(R.id.fl_drawing_view_container)
-                    // val myBitmap :Bitmap = getBitmapFromView(flDrawingView)
-                    saveBitmapFile(getBitmapFromView(flDrawingView))
-                }
-            }
+
         }
     }
     private  fun showBrushSizeChooserDialog(){
@@ -161,12 +154,6 @@ class MainActivity : AppCompatActivity() {
             mImageButtonCurrentPaint = view
 
         }
-    }
-    private fun isReadStorageAllowed():Boolean{
-        val result = ContextCompat.checkSelfPermission(
-                this,Manifest.permission.READ_EXTERNAL_STORAGE
-                )
-        return  result == PackageManager.PERMISSION_GRANTED
     }
 
     private fun requestStoragePermission(){
